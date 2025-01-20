@@ -1,5 +1,5 @@
 # Picar-X
-
+Nathan Jones is the editor of this repository, and the intention of this RobotSystems repository is for editing the existing PiCar code and running it in a virtual environment before running the code on the PiCar hardware. 
 Picar-X Python library for Raspberry Pi.
 
 ## Links

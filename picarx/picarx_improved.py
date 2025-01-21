@@ -307,7 +307,7 @@ class Picarx(object):
     # new added functions
     def move_forward(self, speed, duration):
         # set angle to calibrated zero angle
-        self.set_dir_servo_angle(self.dir_cali_val)
+        self.set_dir_servo_angle(0)
         # move forward
         self.forward(speed)
         # time to move forward
@@ -316,87 +316,87 @@ class Picarx(object):
 
     def move_backward(self, speed, duration):
         # set angle to calibrated zero angle
-        self.set_dir_servo_angle(self.dir_cali_val)
+        self.set_dir_servo_angle(0)
         # move backward
         self.backward(speed)
         # time to move backward
         time.sleep(duration)
         self.stop()
 
-    def parallel_parking_right(self, speed = 25, right_steering_time = 2.0, backward_steering_time = 2.0, left_steering_time = 2.0, forward_steering_time = 1.0):
+    def parallel_parking_right(self, speed = 10, right_steering_time = 2.0, backward_steering_time = 2.0, left_steering_time = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the right and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val + 30)
+        self.set_dir_servo_angle(30)
         self.backward(speed)
         time.sleep(right_steering_time)
         self.stop()
 
         # straighten the wheel and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val)
+        self.set_dir_servo_angle(0)
         self.backward(speed)
         time.sleep(backward_steering_time)
         self.stop()
 
         # turn all the way to the left and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val - 30)
+        self.set_dir_servo_angle(-30)
         self.backward(speed)
         time.sleep(left_steering_time)
         self.stop()
 
         # straighten the wheel and drive forward
-        self.set_dir_servo_angle(self.dir_cali_val) 
+        self.set_dir_servo_angle(0) 
         self.forward(speed)
         time.sleep(forward_steering_time)
         self.stop()
 
-    def parallel_parking_left(self, speed = 25, left_steering_time = 2.0, backward_steering_time = 2.0, right_steering_time = 2.0, forward_steering_time = 1.0):
+    def parallel_parking_left(self, speed = 10, left_steering_time = 2.0, backward_steering_time = 1.0, right_steering_time = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val - 30)
+        self.set_dir_servo_angle(-30)
         self.backward(speed)
         time.sleep(left_steering_time)
         self.stop()
 
         # straighten the wheel and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val)
+        self.set_dir_servo_angle(0)
         self.backward(speed)
         time.sleep(backward_steering_time)
         self.stop()
 
         # turn all the way to the right and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val + 30)
+        self.set_dir_servo_angle(30)
         self.backward(speed)
         time.sleep(right_steering_time)
         self.stop()
 
         # straighten the wheel and drive forward
-        self.set_dir_servo_angle(self.dir_cali_val) 
+        self.set_dir_servo_angle(0) 
         self.forward(speed)
         time.sleep(forward_steering_time)
         self.stop()
 
-    def k_turning(self, speed = 25, left_steering_time_1 = 2.0, right_steering_time = 2.0, left_steering_time_2 = 2.0, forward_steering_time = 1.0):
+    def k_turning(self, speed = 10, left_steering_time_1 = 2.0, right_steering_time = 2.0, left_steering_time_2 = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive forward
-        self.set_dir_servo_angle(self.dir_cali_val - 30)
+        self.set_dir_servo_angle(-30)
         self.forward(speed)
         time.sleep(left_steering_time_1)
         self.stop()
 
         # turn all the way to the right and drive in reverse
-        self.set_dir_servo_angle(self.dir_cali_val + 30)
+        self.set_dir_servo_angle(30)
         self.backward(speed)
         time.sleep(right_steering_time)
         self.stop()
 
         # turn all the way to the left and drive forward
-        self.set_dir_servo_angle(self.dir_cali_val - 30)
+        self.set_dir_servo_angle(-30)
         self.forward(speed)
         time.sleep(left_steering_time_2)
         self.stop()
 
         # straighten the wheel and drive forward
-        self.set_dir_servo_angle(self.dir_cali_val) 
+        self.set_dir_servo_angle(0) 
         self.forward(speed)
         time.sleep(forward_steering_time)
         self.stop()

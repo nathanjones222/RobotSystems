@@ -33,16 +33,16 @@ try:
 except ImportError:
     on_the_robot = False
 
-if on_the_robot:
-    from sim_robot_hat import fileDB  
-    owner = os.getlogin() 
-else:
-    from sim_robot_hat import fileDB  
-    owner = None  
+# if on_the_robot:
+#     from sim_robot_hat import fileDB  
+#     owner = os.getlogin() 
+# else:
+#     from sim_robot_hat import fileDB  
+#     owner = None  
 
-@log_on_start(logging.DEBUG, "Successful start of constrain()")
-@log_on_error(logging.DEBUG, "Error in constrain()")
-@log_on_end(logging.DEBUG, "Successful end of constrain()")
+# @log_on_start(logging.DEBUG, "Successful start of constrain()")
+# @log_on_error(logging.DEBUG, "Error in constrain()")
+# @log_on_end(logging.DEBUG, "Successful end of constrain()")
 
 def constrain(x, min_val, max_val):
     '''

@@ -326,7 +326,7 @@ class Picarx(object):
 
         self.stop()
 
-    def parallel_parking_right(self, speed = 20, right_steering_time = 2.0, backward_steering_time = 1.0, left_steering_time = 2.0, forward_steering_time = 1.0):
+    def parallel_parking_right(self, speed = 30, right_steering_time = 2.0, backward_steering_time = 1.0, left_steering_time = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the right and drive in reverse
         self.set_dir_servo_angle(30)
@@ -352,7 +352,7 @@ class Picarx(object):
         time.sleep(forward_steering_time)
         self.stop()
 
-    def parallel_parking_left(self, speed = 20, left_steering_time = 2.0, backward_steering_time = 1.0, right_steering_time = 2.0, forward_steering_time = 1.0):
+    def parallel_parking_left(self, speed = 30, left_steering_time = 2.0, backward_steering_time = 1.0, right_steering_time = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive in reverse
         self.set_dir_servo_angle(-30)
@@ -378,7 +378,7 @@ class Picarx(object):
         time.sleep(forward_steering_time)
         self.stop()
 
-    def k_turning(self, speed = 20, left_steering_time_1 = 2.0, right_steering_time = 2.0, left_steering_time_2 = 2.0, forward_steering_time = 1.0):
+    def k_turning(self, speed = 30, left_steering_time_1 = 2.0, right_steering_time = 2.0, left_steering_time_2 = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive forward
         self.set_dir_servo_angle(-30)
@@ -428,9 +428,9 @@ if __name__ == "__main__":
             elif 'd' == key: 
                 px.parallel_parking_right()
             elif 'w' == key: 
-                px.move_forward(20, 2)
+                px.move_forward(30, 2)
             elif 's' == key: 
-                px.move_backward(20, 2)
+                px.move_backward(30, 2)
             elif 'e' == key: 
                 px.k_turning()
             elif 'z' == key:

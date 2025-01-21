@@ -419,7 +419,7 @@ if __name__ == "__main__":
         print(manual)
         key = readchar.readkey()
         key = key.lower()
-        if key in ('adwskz'): 
+        if key in ('adwsez'): 
             if 'a' == key:
                 px.parallel_parking_left()
             elif 'd' == key: 
@@ -428,7 +428,7 @@ if __name__ == "__main__":
                 px.move_forward(20, 1)
             elif 's' == key: 
                 px.move_backward(20, 1)
-            elif 'k' == key: 
+            elif 'e' == key: 
                 px.k_turning()
             elif 'z' == key:
                 px.stop()

@@ -1,6 +1,6 @@
 # This is an improved version of the original picarx.py file
 import logging
-from logdecorator import log_on_start, log_on_end, log_on_error
+# from logdecorator import log_on_start, log_on_end, log_on_error
 import os
 try:
     from robot_hat import Pin, ADC, PWM, Servo, fileDB
@@ -15,6 +15,11 @@ from sim_robot_hat import Grayscale_Module, Ultrasonic, utils
 import time
 import readchar
 import math
+
+# git status
+# git add -a
+# git commit -m
+# git push 
 
 # implement logging for debugging code
 logging_format = "%(asctime)s: %(message)s"

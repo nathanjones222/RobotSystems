@@ -378,7 +378,7 @@ class Picarx(object):
         time.sleep(forward_steering_time)
         self.stop()
 
-    def k_turning(self, speed = 30, left_steering_time_1 = 2.5, right_steering_time = 2.5, left_steering_time_2 = 2.5, forward_steering_time = 1.0):
+    def k_turning(self, speed = 30, left_steering_time_1 = 2.5, right_steering_time = 2.5, left_steering_time_2 = 3.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive forward
         self.set_dir_servo_angle(-30)

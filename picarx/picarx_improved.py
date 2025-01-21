@@ -314,6 +314,8 @@ class Picarx(object):
         # time to move forward
         time.sleep(duration)
 
+        self.stop()
+
     def move_backward(self, speed, duration):
         # set angle to calibrated zero angle
         self.set_dir_servo_angle(0)
@@ -322,7 +324,9 @@ class Picarx(object):
         # time to move backward
         time.sleep(duration)
 
-    def parallel_parking_right(self, speed = 100, right_steering_time = 2.0, backward_steering_time = 1.0, left_steering_time = 2.0, forward_steering_time = 1.0):
+        self.stop()
+
+    def parallel_parking_right(self, speed = 10, right_steering_time = 2.0, backward_steering_time = 1.0, left_steering_time = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the right and drive in reverse
         self.set_dir_servo_angle(30)
@@ -348,7 +352,7 @@ class Picarx(object):
         time.sleep(forward_steering_time)
         self.stop()
 
-    def parallel_parking_left(self, speed = 100, left_steering_time = 2.0, backward_steering_time = 1.0, right_steering_time = 2.0, forward_steering_time = 1.0):
+    def parallel_parking_left(self, speed = 10, left_steering_time = 2.0, backward_steering_time = 1.0, right_steering_time = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive in reverse
         self.set_dir_servo_angle(-30)
@@ -374,7 +378,7 @@ class Picarx(object):
         time.sleep(forward_steering_time)
         self.stop()
 
-    def k_turning(self, speed = 100, left_steering_time_1 = 2.0, right_steering_time = 2.0, left_steering_time_2 = 2.0, forward_steering_time = 1.0):
+    def k_turning(self, speed = 10, left_steering_time_1 = 2.0, right_steering_time = 2.0, left_steering_time_2 = 2.0, forward_steering_time = 1.0):
         
         # turn all the way to the left and drive forward
         self.set_dir_servo_angle(-30)
@@ -424,9 +428,9 @@ if __name__ == "__main__":
             elif 'd' == key: 
                 px.parallel_parking_right()
             elif 'w' == key: 
-                px.move_forward(100, 2)
+                px.move_forward(10, 2)
             elif 's' == key: 
-                px.move_backward(100, 2)
+                px.move_backward(10, 2)
             elif 'e' == key: 
                 px.k_turning()
             elif 'z' == key:

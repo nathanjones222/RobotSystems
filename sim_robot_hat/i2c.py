@@ -1,7 +1,24 @@
 #!/usr/bin/env python3
 from .basic import _Basic_class
 from .utils import run_command
-from smbus2 import SMBus
+### from smbus2 import SMBus
+try:
+    from smbus2 import SMBus
+except ImportError:
+    # Placeholder for Windows development
+    class SMBus:
+        def __init__(self, *args, **kwargs):
+            print("SMBus mocked. No actual I2C communication.")
+
+        def write_byte(self, *args, **kwargs):
+            print(f"Mock write_byte called with args: {args}, kwargs: {kwargs}")
+
+        def read_byte(self, *args, **kwargs):
+            print(f"Mock read_byte called with args: {args}, kwargs: {kwargs}")
+            return 0  # Return a mock value
+
+        def close(self):
+            print("Mock SMBus closed.")
 import multiprocessing
 
 
@@ -123,33 +140,77 @@ class I2C(_Basic_class):
             return True
         else:
             return False
+# Modify scan function
+def scan(self):
+    """Scan the I2C bus for devices.
 
-    def scan(self):
-        """Scan the I2C bus for devices
+    :return: List of I2C addresses of devices found
+    :rtype: list
+    """
+    cmd = f"i2cdetect -y {self._bus}"
+    # Run the i2cdetect command
+    _, output = run_command(cmd)
 
-        :return: List of I2C addresses of devices found
-        :rtype: list
-        """
-        cmd = f"i2cdetect -y {self._bus}"
-        # Run the i2cdetect command
-        _, output = run_command(cmd)
-
-        # Parse the output
-        outputs = output.split('\n')[1:]
-        addresses = []
-        addresses_str = []
-        for tmp_addresses in outputs:
-            if tmp_addresses == "":
-                continue
+    # Parse the output
+    outputs = output.split('\n')[1:]
+    addresses = []
+    addresses_str = []
+    
+    for tmp_addresses in outputs:
+        if tmp_addresses == "":
+            continue
+        
+        # Safely handle the case where there might not be a colon (":") in the string
+        if ':' in tmp_addresses:
             tmp_addresses = tmp_addresses.split(':')[1]
-            # Split the addresses into a list
-            tmp_addresses = tmp_addresses.strip().split(' ')
-            for address in tmp_addresses:
-                if address != '--':
+        else:
+            continue  # Skip this line if it doesn't contain expected address format
+        
+        # Split the addresses into a list
+        tmp_addresses = tmp_addresses.strip().split(' ')
+        
+        for address in tmp_addresses:
+            if address != '--':  # Ignore addresses marked with '--'
+                try:
+                    # Convert address to integer and append both formats (decimal and hex)
                     addresses.append(int(address, 16))
                     addresses_str.append(f'0x{address}')
-        self._debug(f"Conneceted i2c device: {addresses_str}")
-        return addresses
+                except ValueError:
+                    # Handle case where conversion might fail (e.g., unexpected data)
+                    continue
+    
+    # Debug log for connected devices
+    self._debug(f"Connected I2C devices: {addresses_str}")
+    
+    # Return the list of addresses found
+    return addresses
+
+    # def scan(self):
+    #     """Scan the I2C bus for devices
+
+    #     :return: List of I2C addresses of devices found
+    #     :rtype: list
+    #     """
+    #     cmd = f"i2cdetect -y {self._bus}"
+    #     # Run the i2cdetect command
+    #     _, output = run_command(cmd)
+
+    #     # Parse the output
+    #     outputs = output.split('\n')[1:]
+    #     addresses = []
+    #     addresses_str = []
+    #     for tmp_addresses in outputs:
+    #         if tmp_addresses == "":
+    #             continue
+    #         tmp_addresses = tmp_addresses.split(':')[1]
+    #         # Split the addresses into a list
+    #         tmp_addresses = tmp_addresses.strip().split(' ')
+    #         for address in tmp_addresses:
+    #             if address != '--':
+    #                 addresses.append(int(address, 16))
+    #                 addresses_str.append(f'0x{address}')
+    #     self._debug(f"Conneceted i2c device: {addresses_str}")
+    #     return addresses
 
     def write(self, data):
         """Write data to the I2C device

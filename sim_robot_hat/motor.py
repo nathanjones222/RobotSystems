@@ -6,16 +6,18 @@ from .filedb import fileDB
 import os
 
 # user and User home directory
-User = os.popen('echo ${SUDO_USER:-$LOGNAME}').readline().strip()
-UserHome = os.popen('getent passwd %s | cut -d: -f 6' %
-                    User).readline().strip()
-config_file = '%s/.config/robot-hat/robot-hat.conf' % UserHome
-
+# User = os.popen('echo ${SUDO_USER:-$LOGNAME}').readline().strip()
+# UserHome = os.popen('getent passwd %s | cut -d: -f 6' %
+#                     User).readline().strip()
+# config_file = '%s/.config/robot-hat/robot-hat.conf' % UserHome
+User = None
+UserHome = None
+config_file = None
 
 class Motor():
     """Motor"""
     PERIOD = 4095
-    PRESCALER = 10
+    # PRESCALER = 10
 
     def __init__(self, pwm, dir, is_reversed=False):
         """
@@ -29,7 +31,7 @@ class Motor():
         self.pwm = pwm
         self.dir = dir
         self.pwm.period(self.PERIOD)
-        self.pwm.prescaler(self.PRESCALER)
+        # self.pwm.prescaler(self.PRESCALER)
         self.pwm.pulse_width_percent(0)
         self._speed = 0
         self._is_reverse = is_reversed

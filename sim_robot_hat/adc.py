@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from .i2c import I2C
 
-
 class ADC(I2C):
     """
     Analog to digital converter

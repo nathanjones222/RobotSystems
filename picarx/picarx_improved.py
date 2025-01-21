@@ -7,11 +7,10 @@ try:
     from robot_hat import Grayscale_Module, Ultrasonic, utils
 except ImportError:
     import sys
-sys.path.append(os.path.abspath(os.path.join(
-os.path.dirname(__file__), "..")))
-
-from sim_robot_hat import Pin, ADC, PWM, Servo, fileDB
-from sim_robot_hat import Grayscale_Module, Ultrasonic, utils
+    sys.path.append(os.path.abspath(os.path.join(
+    os.path.dirname(__file__), "..")))
+    from sim_robot_hat import Pin, ADC, PWM, Servo, fileDB
+    from sim_robot_hat import Grayscale_Module, Ultrasonic, utils
 import time
 import readchar
 import math

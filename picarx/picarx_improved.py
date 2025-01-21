@@ -416,6 +416,7 @@ if __name__ == "__main__":
     
     px = Picarx()
     while True: 
+        print(manual)
         key = readchar.readkey()
         key = key.lower()
         if key in ('adwskz'): 

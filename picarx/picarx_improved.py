@@ -65,7 +65,7 @@ class Picarx(object):
     CAM_TILT_MAX = 65
 
     PERIOD = 4095
-    # PRESCALER = 10
+    PRESCALER = 10
     TIMEOUT = 0.02
 
     # servo_pins: camera_pan_servo, camera_tilt_servo, direction_servo
@@ -116,7 +116,7 @@ class Picarx(object):
         # init pwm
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
-        #   pin.prescaler(self.PRESCALER)
+            pin.prescaler(self.PRESCALER)
 
         # --------- grayscale module init ---------
         adc0, adc1, adc2 = [ADC(pin) for pin in grayscale_pins]
@@ -149,8 +149,8 @@ class Picarx(object):
             direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
         # print(f"direction: {direction}, speed: {speed}")
-        if speed != 0:
-            speed = int(speed /2 ) + 50
+        # if speed != 0:
+        #     speed = int(speed /2 ) + 50
         speed = speed - self.cali_speed_value[motor]
         if direction < 0:
             self.motor_direction_pins[motor].high()
@@ -313,7 +313,6 @@ class Picarx(object):
         self.forward(speed)
         # time to move forward
         time.sleep(duration)
-        self.stop()
 
     def move_backward(self, speed, duration):
         # set angle to calibrated zero angle
@@ -322,7 +321,6 @@ class Picarx(object):
         self.backward(speed)
         # time to move backward
         time.sleep(duration)
-        self.stop()
 
     def parallel_parking_right(self, speed = 5, right_steering_time = 2.0, backward_steering_time = 1.0, left_steering_time = 2.0, forward_steering_time = 1.0):
         

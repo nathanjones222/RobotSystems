@@ -1,19 +1,4 @@
-import os
-import sys
-from sim_robot_hat.modules import Grayscale_Module
-from sim_robot_hat.pin import Pin
-from sim_robot_hat.pwm import PWM
 from sim_robot_hat.adc import ADC
-from sim_robot_hat.i2c import I2C
-import time
-from sim_robot_hat.basic import _Basic_class
-from typing import Union, List, Tuple, Optional
-sys.path.append(os.path.abspath(os.path.join(
-os.path.dirname(__file__), "..")))
-
-from picarx_improved import Picarx
-px = Picarx()
-grayscale = Grayscale_Module()
 
 class Sense():
     def __init__(self, pin0: ADC, pin1: ADC, pin2: ADC, reference: int = None):

@@ -1,12 +1,6 @@
 # This is the line following program for part 3 of the intro to robotics 2 manual
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(
-os.path.dirname(__file__), "..")))
-
 from picarx_improved import Picarx
 from time import sleep
-
 px = Picarx()
 
 from classes.sense import Sense

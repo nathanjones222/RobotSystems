@@ -415,7 +415,7 @@ class Picarx(object):
 
         try:
             while(True):
-                picar.forward(10)
+                picar.forward(15)
                 data = sensor.read_data()
                 
                 #turn_proportion = interpreter.interpret_sensor_reading_discrete(data, threshold=20)

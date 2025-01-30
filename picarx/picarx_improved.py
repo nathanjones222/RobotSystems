@@ -410,12 +410,12 @@ class Picarx(object):
         from classes.interpreter import Interpreter
         from classes.controller import Controller
         sensor = Sensor()
-        interpreter = Interpreter(line_threshold=25, sensitivity=1.0, is_dark_line=True)
+        interpreter = Interpreter(line_threshold=15, sensitivity=1.0, is_dark_line=True)
         controller = Controller(max_turn_angle=30)
 
         try:
             while(True):
-                picar.forward(15)
+                picar.forward(10)
                 data = sensor.read_data()
                 
                 #turn_proportion = interpreter.interpret_sensor_reading_discrete(data, threshold=20)

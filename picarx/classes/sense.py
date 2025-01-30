@@ -5,9 +5,12 @@ class Sense():
         self.pins = (pin0, pin1, pin2)
     def grayscale_data(self, channel: int = None) -> list:
         if channel == None:
-            return [self.pins[i].read() for i in range(3)]
+            return [self.pins[i].read() for i in range(3) if self.pins[i] is not None]
         else:
-            return self.pins[channel].read()
+            if self.pins[channel] is not None:
+                return self.pins[channel].read()
+            else:
+                return None
 # def get_grayscale_data(self):
     #     grayscale_data = list.copy(grayscale.read())
     #     return grayscale_data

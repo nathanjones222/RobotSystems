@@ -438,7 +438,7 @@ class Picarx(object):
 manual = '''
 --------------- Picar-X Maneuver Library -----------------
 
-    [W]: move forward
+    [W]: move forward          [L]: line follow
     [S]: move backward         [A]: parallel park to the left
     [E]: k turn                [D]: parallel park to the right
 
@@ -453,7 +453,7 @@ if __name__ == "__main__":
         print(manual)
         key = readchar.readkey()
         key = key.lower()
-        if key in ('adwsez'): 
+        if key in ('adwsezl'): 
             if 'a' == key:
                 px.parallel_parking_left()
             elif 'd' == key: 

@@ -1,9 +1,10 @@
 # This is an improved version of the original picarx.py file
+
 # Reference for git commands for updating code
-# git status
-# git add -a
-# git commit -m
-# git push 
+#   git status
+#   git add -a
+#   git commit -m
+#   git push 
 
 import logging
 # from logdecorator import log_on_start, log_on_end, log_on_error
@@ -404,6 +405,36 @@ class Picarx(object):
         time.sleep(forward_steering_time)
         self.stop()
 
+    def line_follow(picar):
+        from classes.sensor import Sensor
+        from classes.interpreter import Interpreter
+        from classes.controller import Controller
+        sensor = Sensor()
+        interpreter = Interpreter(line_threshold=45, sensitivity=1.0, is_dark_line=True)
+        controller = Controller(max_turn_angle=30)
+
+        try:
+            while(True):
+                picar.forward(50)
+                data = sensor.read_data()
+                
+                #turn_proportion = interpreter.interpret_sensor_reading_discrete(data, threshold=20)
+                
+                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="cubic", threshold=125)
+                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="square", threshold=125)
+                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="linear", threshold=125)
+                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="sin", threshold=125)
+                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="logistic", threshold=125)
+                
+                # Oscillation: k_p=0.7, k_i=0.0, k_d=0.0
+                # Mitigated oscillation: k_p=0.35, k_i=1.0, k_d=0.0
+                turn_proportion = interpreter.interpret_sensor_reading_PID(data, k_p=0.7, k_i=0.00, k_d=0.0)
+                
+                controller.set_turn_proportion(turn_proportion)
+                time.sleep(0.05)
+        except:
+            pass
+
 manual = '''
 --------------- Picar-X Maneuver Library -----------------
 
@@ -433,6 +464,8 @@ if __name__ == "__main__":
                 px.move_backward(30, 2)
             elif 'e' == key: 
                 px.k_turning()
+            elif 'l' == key:
+                px.line_follow()
             elif 'z' == key:
                 px.stop()
         elif key == readchar.key.CTRL_C:

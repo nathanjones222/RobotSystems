@@ -410,7 +410,7 @@ class Picarx(object):
         from classes.interpreter import Interpreter
         from classes.controller import Controller
         sensor = Sensor()
-        interpreter = Interpreter(line_threshold=45, sensitivity=1.0, is_dark_line=True)
+        interpreter = Interpreter(line_threshold=35, sensitivity=1.0, is_dark_line=True)
         controller = Controller(max_turn_angle=30)
 
         try:

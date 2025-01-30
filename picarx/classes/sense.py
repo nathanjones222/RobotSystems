@@ -1,7 +1,7 @@
 from robot_hat.adc import ADC
 
 class Sense():
-    def __init__(self, pin0: ADC, pin1: ADC, pin2: ADC, reference: int = None):
+    def __init__(self, pin0: ADC = None, pin1: ADC = None, pin2: ADC = None):
         self.pins = (pin0, pin1, pin2)
     def grayscale_data(self, channel: int = None) -> list:
         if channel == None:

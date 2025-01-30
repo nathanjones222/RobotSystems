@@ -1,4 +1,4 @@
-from sim_robot_hat.adc import ADC
+from robot_hat.adc import ADC
 
 class Sense():
     def __init__(self, pin0: ADC, pin1: ADC, pin2: ADC, reference: int = None):

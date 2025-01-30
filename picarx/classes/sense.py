@@ -11,7 +11,7 @@ from typing import Union, List, Tuple, Optional
 sys.path.append(os.path.abspath(os.path.join(
 os.path.dirname(__file__), "..")))
 
-from picarx.picarx_improved import Picarx
+from picarx import Picarx
 px = Picarx()
 grayscale = Grayscale_Module()
 

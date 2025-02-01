@@ -12,12 +12,14 @@ import os
 try:
     from robot_hat import Pin, ADC, PWM, Servo, fileDB
     from robot_hat import Grayscale_Module, Ultrasonic, utils
+    on_the_robot = True
 except ImportError:
     import sys
     sys.path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), "..")))
     from sim_robot_hat import Pin, ADC, PWM, Servo, fileDB
     from sim_robot_hat import Grayscale_Module, Ultrasonic, utils
+    on_the_robot = False
 import time
 import readchar
 import math
@@ -415,21 +417,12 @@ class Picarx(object):
 
         try:
             while(True):
+                # set forward speed 
                 picar.forward(12.5)
+                # read the grayscale data
                 data = sensor.read_data()
-                
-                #turn_proportion = interpreter.interpret_sensor_reading_discrete(data, threshold=20)
-                
-                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="cubic", threshold=125)
-                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="square", threshold=125)
-                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="linear", threshold=125)
-                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="sin", threshold=125)
-                #turn_proportion = interpreter.interpret_sensor_reading_proportional(data, scaling_function="logistic", threshold=125)
-                
-                # Oscillation: k_p=0.7, k_i=0.0, k_d=0.0
-                # Mitigated oscillation: k_p=0.35, k_i=1.0, k_d=0.0
+                # interpret the grayscale data and scale the turn proportion
                 turn_proportion = interpreter.interpret_sensor_reading_PID(data, k_p=0.7, k_i=0.00, k_d=0.0)
-                
                 controller.set_turn_proportion(turn_proportion)
                 time.sleep(0.05)
         except:

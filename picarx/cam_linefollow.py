@@ -1,43 +1,29 @@
-import cv2
 import numpy as np
 from robot_hat import Servo
+from vilib import Vilib
+import time
 
 class CameraSensor:
-    def __init__(self, camera_index=0, frame_width=320, frame_height=240):
-        self.cap = cv2.VideoCapture(camera_index)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
-
+    def __init__(self):
+        Vilib.camera_start()
+        Vilib.display()
+        Vilib.line_following_switch(True)
+        time.sleep(0.5)  # Allow camera to initialize
+    
     def read_data(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            return None
+        line_x = Vilib.detect_obj_parameter.get('line_x', -1)
+        frame_center = 320  # Assuming 640x480 resolution
         
-        # Convert to grayscale
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        
-        # Apply Gaussian blur
-        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-        
-        # Edge detection
-        edges = cv2.Canny(blurred, 50, 150)
-        
-        # Detect the line using Hough Transform
-        lines = cv2.HoughLinesP(edges, 1, np.pi/180, 50, minLineLength=50, maxLineGap=10)
-        
-        if lines is not None:
-            line_positions = [line[0][0] for line in lines]  # Extract x-coordinates of lines
-            avg_position = np.mean(line_positions)  # Compute average x position
-            frame_center = frame.shape[1] / 2  # Get frame center
-            error = (avg_position - frame_center) / frame_center  # Normalize error (-1 to 1)
+        if line_x != -1:
+            error = (line_x - frame_center) / frame_center  # Normalize error (-1 to 1)
         else:
             error = 0  # No line detected
         
         return error
     
     def release(self):
-        self.cap.release()
-        cv2.destroyAllWindows()
+        Vilib.line_following_switch(False)
+        Vilib.camera_close()
 
 class Interpreter:
     def __init__(self, k_p=1.0, k_i=0.0, k_d=0.0):
@@ -78,9 +64,15 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
     controller = Controller(angle_max=30)
     
-    while True:
-        error = sensor.read_data()
-        if error is not None:
-            turn_proportion = interpreter.interpret_camera_data(error)
-            controller.set_turn_proportion(turn_proportion)
-            print(f"Turn Proportion: {turn_proportion}, Steering Angle: {turn_proportion * 30}")
+    try:
+        while True:
+            error = sensor.read_data()
+            if error is not None:
+                turn_proportion = interpreter.interpret_camera_data(error)
+                controller.set_turn_proportion(turn_proportion)
+                print(f"Turn Proportion: {turn_proportion}, Steering Angle: {turn_proportion * 30}")
+            time.sleep(0.05)
+    finally:
+        sensor.release()
+        print("Camera released and exiting.")
+

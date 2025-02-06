@@ -7,7 +7,6 @@ class CameraSensor:
         # Start camera and initialize Vilib
         Vilib.camera_start()
         Vilib.display()  # To show camera feed
-        Vilib.line_following_switch(True)  # Enable line following mode
         time.sleep(0.5)  # Allow camera to initialize
 
     def read_data(self):
@@ -26,8 +25,7 @@ class CameraSensor:
         return error
 
     def release(self):
-        # Stop line following and release the camera
-        Vilib.line_following_switch(False)
+        # Stop the camera
         Vilib.camera_close()
 
 class Interpreter:
@@ -93,5 +91,3 @@ if __name__ == "__main__":
         px.stop()
         sensor.release()
         print("Exiting line following.")
-
-

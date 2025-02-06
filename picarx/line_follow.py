@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     try:
         px.forward(12.5)  # Set constant forward speed
-        
+        px.set_cam_pan_angle(-15)
         while True:
             error = sensor.read_data()
             turn_proportion = interpreter.interpret_camera_data(error)

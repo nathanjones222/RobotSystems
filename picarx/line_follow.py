@@ -113,7 +113,7 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
     try:
-        px.forward(30)  # Set constant forward speed
+        px.forward(12.5)  # Set constant forward speed
         
         while True:
             error = sensor.read_data()

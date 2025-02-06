@@ -2,22 +2,24 @@ import cv2
 import numpy as np
 import time
 from picarx import Picarx
+from picamera2 import Picamera2, Preview
 
 # Enable debugging mode (Set to False for normal operation)
 DEBUG_MODE = True
 
 class CameraSensor:
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)  # Open default camera
-        time.sleep(0.5)  # Allow camera to initialize
+        # Initialize Picamera2
+        self.camera = Picamera2()
+        self.camera.configure(self.camera.create_still_configuration())
+        self.camera.start()
+        time.sleep(1)  # Allow camera to initialize
 
     def read_data(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            print("[ERROR] Camera frame not captured")
-            return 0  # No frame captured
+        # Capture a frame using Picamera2
+        frame = self.camera.capture_array()
         
-        # Convert to HSV
+        # Convert to HSV color space
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         # Define HSV range for line detection
@@ -74,7 +76,7 @@ class CameraSensor:
         return error
     
     def release(self):
-        self.cap.release()
+        self.camera.stop()
         cv2.destroyAllWindows()
 
 class Interpreter:
@@ -130,5 +132,6 @@ if __name__ == "__main__":
         px.stop()
         sensor.release()
         print("[INFO] Stopped and exiting.")
+
 
 

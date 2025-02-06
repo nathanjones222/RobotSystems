@@ -24,7 +24,7 @@ class CameraSensor:
 
         # Define HSV range for line detection
         lower_black = np.array([0, 0, 0])   # Adjust if needed
-        upper_black = np.array([180, 255, 80])  
+        upper_black = np.array([180, 255, 100])  
 
         # Create mask
         mask = cv2.inRange(hsv, lower_black, upper_black)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
     try:
-        px.forward(5)  # Set constant forward speed
+        px.forward(2.5)  # Set constant forward speed
         px.set_cam_tilt_angle(-30)
         while True:
             error = sensor.read_data()

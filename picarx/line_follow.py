@@ -11,6 +11,7 @@ class CameraSensor:
     def read_data(self):
         ret, frame = self.cap.read()
         if not ret:
+            print("[ERROR] Camera frame not captured")
             return 0  # No frame captured
         
         # Convert to HSV
@@ -34,11 +35,22 @@ class CameraSensor:
                 line_x = int(M["m10"] / M["m00"])  # Centroid X-coordinate
                 frame_center = frame.shape[1] // 2  # Assuming 640x480 resolution
                 error = (line_x - frame_center) / frame_center  # Normalize error (-1 to 1)
+                
+                # Debug: Draw detected line
+                cv2.drawContours(frame, [largest_contour], -1, (0, 255, 0), 2)
+                cv2.circle(frame, (line_x, frame.shape[0] // 2), 5, (0, 0, 255), -1)
+
             else:
                 error = 0
         else:
+            print("[WARNING] No line detected")
             error = 0  # No line detected
-        
+
+        # Debug: Show processed frame
+        cv2.imshow("Line Detection", frame)
+        cv2.imshow("Mask", mask)
+        cv2.waitKey(1)
+
         return error
     
     def release(self):
@@ -62,6 +74,9 @@ class Interpreter:
         turn_proportion = p_term + i_term + d_term
         turn_proportion = max(-1, min(1, turn_proportion))  # Clamp to [-1, 1]
         
+        # Debug: Print PID components
+        print(f"[DEBUG] P: {p_term:.2f}, I: {i_term:.2f}, D: {d_term:.2f}, Turn Proportion: {turn_proportion:.2f}")
+
         # Update errors
         self.sum_error += error
         self.last_error = error
@@ -75,18 +90,22 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
     try:
-        px.forward(30)  # Set constant forward speed
+        px.forward(12.5)  # Set constant forward speed
         
         while True:
             error = sensor.read_data()
             turn_proportion = interpreter.interpret_camera_data(error)
-            px.set_dir_servo_angle(turn_proportion * 30)  # Scale to servo range
+            turn_angle = turn_proportion * 30  # Scale to servo range
             
-            print(f"Error: {error}, Turn Angle: {turn_proportion * 30}")
+            px.set_dir_servo_angle(turn_angle)
+            
+            # Debug: Print error and steering angle
+            print(f"[INFO] Error: {error:.2f}, Turn Angle: {turn_angle:.2f}")
+            
             time.sleep(0.05)
     
     except KeyboardInterrupt:
         px.stop()
         sensor.release()
-        print("Stopped and exiting.")
+        print("[INFO] Stopped and exiting.")
 

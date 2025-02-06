@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import time
-from picarx_improved import Picarx
+from picarx import Picarx
 from picamera2 import Picamera2, Preview
 
 # Enable debugging mode (Set to False for normal operation)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
     try:
-        px.forward()  # Set constant forward speed
+        px.forward(5)  # Set constant forward speed
         px.set_cam_tilt_angle(-30)
         while True:
             error = sensor.read_data()

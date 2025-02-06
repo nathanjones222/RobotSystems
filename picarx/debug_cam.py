@@ -1,10 +1,17 @@
 import cv2
 
-cap = cv2.VideoCapture(0)  # Try 1 instead of 0 if it doesn't work
+cap = cv2.VideoCapture(0)
 
-if not cap.isOpened():
-    print("[ERROR] Camera not detected!")
-else:
-    print("[SUCCESS] Camera is working.")
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("[ERROR] Cannot capture frame")
+        break
+
+    cv2.imshow("Camera Test", frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 cap.release()
+cv2.destroyAllWindows()

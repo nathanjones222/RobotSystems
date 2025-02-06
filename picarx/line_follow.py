@@ -3,6 +3,9 @@ import numpy as np
 import time
 from picarx import Picarx
 
+# Enable debugging mode (Set to False for normal operation)
+DEBUG_MODE = True
+
 class CameraSensor:
     def __init__(self):
         self.cap = cv2.VideoCapture(0)  # Open default camera
@@ -17,39 +20,56 @@ class CameraSensor:
         # Convert to HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        # Define color range for line detection (Adjust as needed)
-        lower_black = np.array([0, 0, 0])
-        upper_black = np.array([180, 255, 50])
+        # Define HSV range for line detection
+        lower_black = np.array([0, 0, 0])   # Adjust if needed
+        upper_black = np.array([180, 255, 50])  
 
         # Create mask
         mask = cv2.inRange(hsv, lower_black, upper_black)
 
         # Find contours
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
+
+        if DEBUG_MODE:
+            # Show Raw Camera Feed
+            cv2.imshow("Raw Camera Feed", frame)
+            
+            # Show Line Mask
+            cv2.imshow("Line Mask", mask)
+
+            # Print Contour Count
+            print(f"[DEBUG] Number of contours detected: {len(contours)}")
+
+            # If debugging, allow user to click and check HSV values
+            def pick_color(event, x, y, flags, param):
+                if event == cv2.EVENT_LBUTTONDOWN:
+                    pixel = hsv[y, x]
+                    print(f"[DEBUG] HSV Value at ({x}, {y}): {pixel}")
+            
+            cv2.setMouseCallback("Raw Camera Feed", pick_color)
+
+            cv2.waitKey(1)
+
         if contours:
             largest_contour = max(contours, key=cv2.contourArea)
             M = cv2.moments(largest_contour)
             
             if M["m00"] != 0:
-                line_x = int(M["m10"] / M["m00"])  # Centroid X-coordinate
+                line_x = int(M["m10"] / M["m00"])  # Get X position of centroid
                 frame_center = frame.shape[1] // 2  # Assuming 640x480 resolution
                 error = (line_x - frame_center) / frame_center  # Normalize error (-1 to 1)
-                
-                # Debug: Draw detected line
+
+                # Draw detected line
                 cv2.drawContours(frame, [largest_contour], -1, (0, 255, 0), 2)
                 cv2.circle(frame, (line_x, frame.shape[0] // 2), 5, (0, 0, 255), -1)
+                if DEBUG_MODE:
+                    cv2.imshow("Contours", frame)
 
             else:
                 error = 0
         else:
             print("[WARNING] No line detected")
             error = 0  # No line detected
-
-        # Debug: Show processed frame
-        cv2.imshow("Line Detection", frame)
-        cv2.imshow("Mask", mask)
-        cv2.waitKey(1)
 
         return error
     
@@ -75,7 +95,8 @@ class Interpreter:
         turn_proportion = max(-1, min(1, turn_proportion))  # Clamp to [-1, 1]
         
         # Debug: Print PID components
-        print(f"[DEBUG] P: {p_term:.2f}, I: {i_term:.2f}, D: {d_term:.2f}, Turn Proportion: {turn_proportion:.2f}")
+        if DEBUG_MODE:
+            print(f"[DEBUG] P: {p_term:.2f}, I: {i_term:.2f}, D: {d_term:.2f}, Turn Proportion: {turn_proportion:.2f}")
 
         # Update errors
         self.sum_error += error
@@ -90,7 +111,7 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
     try:
-        px.forward(12.5)  # Set constant forward speed
+        px.forward(30)  # Set constant forward speed
         
         while True:
             error = sensor.read_data()
@@ -100,7 +121,8 @@ if __name__ == "__main__":
             px.set_dir_servo_angle(turn_angle)
             
             # Debug: Print error and steering angle
-            print(f"[INFO] Error: {error:.2f}, Turn Angle: {turn_angle:.2f}")
+            if DEBUG_MODE:
+                print(f"[INFO] Error: {error:.2f}, Turn Angle: {turn_angle:.2f}")
             
             time.sleep(0.05)
     
@@ -108,4 +130,5 @@ if __name__ == "__main__":
         px.stop()
         sensor.release()
         print("[INFO] Stopped and exiting.")
+
 

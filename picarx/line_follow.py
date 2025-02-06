@@ -17,7 +17,7 @@ class CameraSensor:
 
     def read_data(self):
         # Capture a frame using Picamera2
-        frame = self.camera.capture_array()
+        frame = self.camera.capture_array("main", "bgr", resize=(320, 240))
         
         # Convert to HSV color space
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -113,8 +113,9 @@ if __name__ == "__main__":
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
     try:
-        px.forward(2.5)  # Set constant forward speed
+        px.forward(0.5)  # Set constant forward speed
         px.set_cam_tilt_angle(-30)
+
         while True:
             error = sensor.read_data()
             turn_proportion = interpreter.interpret_camera_data(error)
@@ -126,7 +127,7 @@ if __name__ == "__main__":
             if DEBUG_MODE:
                 print(f"[INFO] Error: {error:.2f}, Turn Angle: {turn_angle:.2f}")
             
-            time.sleep(0.05)
+            time.sleep(0.1)
     
     except KeyboardInterrupt:
         px.stop()

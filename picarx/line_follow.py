@@ -24,7 +24,7 @@ class CameraSensor:
 
         # Define HSV range for line detection
         lower_black = np.array([0, 0, 0])   # Adjust if needed
-        upper_black = np.array([180, 255, 80])  
+        upper_black = np.array([180, 255, 65])  
 
         # Create mask
         mask = cv2.inRange(hsv, lower_black, upper_black)

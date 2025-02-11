@@ -25,7 +25,7 @@ class CameraSensor:
 
         # Define HSV range for line detection
         lower_black = np.array([0, 0, 0])   # Adjust if needed
-        upper_black = np.array([180, 255, 120])  
+        upper_black = np.array([180, 255, 100])  
 
         # Create mask
         mask = cv2.inRange(hsv, lower_black, upper_black)
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     input("Press Enter to start line following...")  # Wait for user input
 
     try:
-        px.forward(30)  # Set constant forward speed
+        px.forward(20)  # Set constant forward speed
         px.set_cam_tilt_angle(-30)
 
         while True:

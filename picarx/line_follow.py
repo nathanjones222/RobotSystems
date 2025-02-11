@@ -25,7 +25,7 @@ class CameraSensor:
 
         # Define HSV range for line detection
         lower_black = np.array([0, 0, 0])   # Adjust if needed
-        upper_black = np.array([180, 255, 100])  
+        upper_black = np.array([180, 255, 120])  
 
         # Create mask
         mask = cv2.inRange(hsv, lower_black, upper_black)
@@ -60,7 +60,7 @@ class CameraSensor:
             if M["m00"] != 0:
                 line_x = int(M["m10"] / M["m00"])  # Get X position of centroid
                 frame_center = frame.shape[1] // 2  # Assuming 640x480 resolution
-                error = (line_x - frame_center) / frame_center  # Normalize error (-1 to 1)
+                error = (frame_center - line_x) / frame_center  # Normalize error (-1 to 1)
 
                 # Draw detected line
                 cv2.drawContours(frame, [largest_contour], -1, (0, 255, 0), 2)

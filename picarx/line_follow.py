@@ -123,7 +123,7 @@ if __name__ == "__main__":
         while True:
             error = sensor.read_data()
             turn_proportion = interpreter.interpret_camera_data(error)
-            turn_angle = turn_proportion * 30  # Scale to servo range
+            turn_angle = turn_proportion * 45  # Scale to servo range
             
             px.set_dir_servo_angle(turn_angle)
             

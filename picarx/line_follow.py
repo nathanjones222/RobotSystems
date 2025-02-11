@@ -116,7 +116,7 @@ if __name__ == "__main__":
     input("Press Enter to start line following...")  # Wait for user input
 
     try:
-        px.forward(0.5)  # Set constant forward speed
+        px.forward(12.5)  # Set constant forward speed
         px.set_cam_tilt_angle(-30)
 
         while True:

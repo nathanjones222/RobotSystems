@@ -112,6 +112,8 @@ if __name__ == "__main__":
     sensor = CameraSensor()
     interpreter = Interpreter(k_p=0.5, k_i=0.01, k_d=0.1)
 
+    input("Press Enter to start line following...")  # Wait for user input
+
     try:
         px.forward(0.5)  # Set constant forward speed
         px.set_cam_tilt_angle(-30)
@@ -133,6 +135,7 @@ if __name__ == "__main__":
         px.stop()
         sensor.release()
         print("[INFO] Stopped and exiting.")
+
 
 
 

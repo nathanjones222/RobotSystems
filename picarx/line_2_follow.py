@@ -13,7 +13,12 @@ class CameraSensor:
         self.camera = Picamera2()
         self.camera.configure(self.camera.create_still_configuration())
         self.camera.start()
-        time.sleep(1)  # Allow camera to initialize
+        
+        # Ensure the camera has started properly
+        while not self.camera.started:
+            time.sleep(0.1)  # Small delay to prevent busy-waiting
+
+        print("[INFO] Camera initialized and ready.")
 
     def read_data(self):
         # Capture a frame using Picamera2

@@ -17,7 +17,8 @@ class CameraSensor:
 
     def read_data(self):
         # Capture a frame using Picamera2
-        frame = self.camera.capture_array("main", "bgr", resize=(320, 240))
+        frame = self.camera.capture_array("main")
+        frame = cv2.resize(frame, (320, 240))
         
         # Convert to HSV color space
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)

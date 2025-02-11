@@ -60,7 +60,7 @@ class CameraSensor:
             if M["m00"] != 0:
                 line_x = int(M["m10"] / M["m00"])  # Get X position of centroid
                 frame_center = frame.shape[1] // 2  # Assuming 640x480 resolution
-                error = (frame_center - line_x) / frame_center  # Normalize error (-1 to 1)
+                error = (line_x - frame_center) / frame_center  # Normalize error (-1 to 1)
 
                 # Draw detected line
                 cv2.drawContours(frame, [largest_contour], -1, (0, 255, 0), 2)
@@ -103,6 +103,7 @@ class Interpreter:
 
         # Update errors
         self.sum_error += error
+        self.sum_error = max(-1, min(1, self.sum_error))
         self.last_error = error
         
         return turn_proportion
